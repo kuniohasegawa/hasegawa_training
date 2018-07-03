@@ -1,14 +1,44 @@
+.header{
+	display:inline-block;
+}
+
 .header span{
 	color:red;
-	float:left;	
+	float:left;
+	display:inline-block;
 }
 
 .time{
 	float:right;
-	display:inline;
+	display:inline-block;
+	padding:25px;
+
 }
 
 .footer{
 	text-align:center;
 }
 
+.roomname{
+	margin-right:30px;
+	
+}
+
+.list-name{
+	margin-right:60px;
+}
+
+.room{
+	
+	margin-right:80px;
+}
+
+.regi{
+	padding-right:280px;
+}
+
+
+.btn{
+	background-color:#87cefa;
+	margin-left:30px;
+}
