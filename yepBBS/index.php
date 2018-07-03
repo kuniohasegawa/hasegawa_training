@@ -1,5 +1,25 @@
 <?php
 session_start();
+require('dbconnect.php');
+
+//エラー時のメッセージ
+//$error_msg='必ず入力してください';
+
+//エラーの確認
+if(!empty($_POST)){
+	if(isset($_POST['room']) && $_POST['room']==''){
+		$error['room'] = 'blank';
+	}
+	if(isset($_POST['name']) && $_POST['name']==''){
+		$error['name'] = 'blank';
+	}
+
+	if(empty($error)){
+		$_SESSION['index'] = $_POST;
+		header('Location:room.php ');
+		exit();
+	}
+}	
 
 
 date_default_timezone_set('Asia/Tokyo');
@@ -27,11 +47,21 @@ date_default_timezone_set('Asia/Tokyo');
 	
 	<div class="footer">
 
-	<form method="post" action="">		
+	<form method="post" action="" >		
 		<p class="regi">ルーム登録</p>
 		<span class="roomname">ルーム名</span><input class="room" type="text" name="room"><br>
+	<span class="error_msg"><?php if(isset($error['room']) == 'blank'): ?>
+		<?php echo '必ず入力してください'.'<br>';?>
+		<?php endif; ?>
+	</span>
 		<span class="list-name">名前</span><input class="name"type="text" name="name">
+	
 		<input class="btn" type="submit" value="登録" ><br>
+	<span class="error_msg">
+		<?php if(isset($error['name']) == 'blank'): ?>
+		<?php echo '必ず入力してください'.'<br>'; ?>
+		<?php endif; ?>
+	</span>
 	</div>	
 	</form>
 
