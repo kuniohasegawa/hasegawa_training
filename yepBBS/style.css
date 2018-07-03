@@ -1,0 +1,14 @@
+.header span{
+	color:red;
+	float:left;	
+}
+
+.time{
+	float:right;
+	display:inline;
+}
+
+.footer{
+	text-align:center;
+}
+
