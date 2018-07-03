@@ -42,3 +42,7 @@
 	background-color:#87cefa;
 	margin-left:30px;
 }
+
+.error_msg{
+	color:red;
+}
