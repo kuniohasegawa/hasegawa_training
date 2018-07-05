@@ -16,11 +16,23 @@ if(!empty($_POST)){
 
 	if(empty($error)){
 		$_SESSION['index'] = $_POST;
-		header('Location:room.php ');
-		exit();
+//		header('Location:room.php ');
+//		exit();
 	}
 }	
 
+
+//dbへデータを挿入
+if(!empty($_POST)){
+	$member=$db->prepare('INSERT INTO rooms SET title=?, user_name=?, modified=getlastmod(), created=NOW()');
+	$member->execute(array(
+		$_SESSION['index']['room'],
+		$_SESSION['index']['name'],
+		));
+	unset($_SESSION['index']);
+
+	exit();
+}
 
 date_default_timezone_set('Asia/Tokyo');
 ?>
