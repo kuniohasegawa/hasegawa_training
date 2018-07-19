@@ -1,3 +1,17 @@
+.display-width{
+	width:850px;
+}
+
+body{
+	margin-right: auto;
+	margin-left: auto;
+	width:450px;
+}
+
+h1{
+	text-align:center;
+}
+
 .header{
 	display:inline-block;
 }
@@ -6,6 +20,7 @@
 	color:red;
 	float:left;
 	display:inline-block;
+	padding-left:100px;
 }
 
 .time{
@@ -15,22 +30,70 @@
 
 }
 
+.main-contents{
+	text-align:center;
+}
+
+.contents-table{
+	border:1px;
+	border-style:solid;
+	width:80%;
+}
+
+.contents-table tr:nth-child(odd) td{
+	background-color:#EAF6FD;
+}
+
+.contents-table tr:nth-child(even) td{
+	background-color:#EFEFEF;
+}
+
+/*board.php の css----------------*/
+.main{
+	text-align:center;
+}
+
+.thread{
+	padding-right:40%;
+	float:right;
+}
+
+.room-comment{
+	float:left;
+}
+/*---------------------------------*/
+
 .footer{
 	text-align:center;
 }
 
+
 .roomname{
 	margin-right:30px;
-	
+	margin-left:50px;
+	float:right;
 }
+
 
 .list-name{
 	margin-right:60px;
 }
 
 .room{
-	
 	margin-right:80px;
+}
+
+.room_p{
+	display:inline-block;
+}
+
+.list-comment{
+	margin-left:30px;
+	margin-right:80px;
+}
+
+.room-comment{
+	margin:60px;
 }
 
 .regi{
