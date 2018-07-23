@@ -88,8 +88,6 @@ if($total_text['count'] <= 100){
 function h($value){
 	echo htmlspecialchars($value, ENT_QUOTES, UTF-8);
 }
-
-
 date_default_timezone_set('Asia/Tokyo');
 ?>
 
@@ -115,18 +113,22 @@ date_default_timezone_set('Asia/Tokyo');
 <div class="main">
 	<div class="text">
 		<?php foreach($nullthreads as $nullthread):?>
+		<section class="heads">
 			<div class="text_number"><?php h($nullthread['number']);?></div>
 			<div class="text_name"><?php h($nullthread['user_name']); ?></div>
-			<div class="text_date"><?php h($nullthread['created']);?></div>
+		</section>
+			<div class="text_date"><?php h(date('Y/m/d/h/i',strtotime($nullthread['created'])));?></div>
 			<div class="text_content"><?php h($nullthread['text']); ?><br><br></div>
 	</div>
 
-			<div class="thread">
+			<div class="thread_text">
 				<?php foreach($threads as $thread):?>
 					<?php if($thread['thread_number'] == $nullthread['number']): ?>
+					<section class="threads">
 						<div class="res_number"><?php h($thread['number']) ;?></div>
 						<div class="res_name"><?php h($thread['user_name']); ?></div>
-						<div class="res_date"><?php h($thread['created']);?></div>
+						<div class="res_date"><?php h(date('Y/m/d/h/i',strtotime($thread['created'])));?></div>
+					</section>
 						<div class="res_content"><?php h($thread['text']); ?><br><br></div>
 					<?php endif; ?>
 				<?php endforeach; ?>
@@ -138,7 +140,7 @@ date_default_timezone_set('Asia/Tokyo');
 
 		<form method="post" action="" >
 			<ul>
-				<li class="list_title"><p class="regi">コメント登録</p></li>
+				<li class="title_register"><p class="regi">コメント登録</p></li>
 				<li>
 					<label class="list_title">返信</label><input class="res" type="text" name="res"><br>
 					<label class="error_msg">
@@ -154,7 +156,7 @@ date_default_timezone_set('Asia/Tokyo');
 					</label>
 				</li>
 				<li>
-						<label class="list_title">コメント</label><textarea class="text" name="text" raws="30" cols="60" ></textarea><br>
+						<label class="list_title">コメント</label><textarea class="text" name="text" raws="30" cols="35" ></textarea><br>
 					<label class="error_msg">
 						<?php if(isset($error['text']) == 'blank'): ?>
 						<?php echo '必ず入力してください'.'<br>'; ?>
@@ -162,7 +164,7 @@ date_default_timezone_set('Asia/Tokyo');
 					</label>
 				</li>
 				<li>
-					<label class="list_title">名前</label><input class="nam/" type="text" name="user_name"><br>
+					<label class="list_title">名前</label><input class="name" type="text" name="user_name"><br>
 					<label class="error_msg">
 							<?php if(isset($error['user_name']) == 'blank'): ?>
 						<?php echo '必ず入力してください' ; ?>

@@ -9,7 +9,7 @@ body{
 }
 
 h1{
-	text-align:center;
+	text-align:left;
 }
 
 .header{
@@ -18,15 +18,12 @@ h1{
 
 .header span{
 	color:red;
-	float:left;
-	display:inline-block;
-	padding-left:100px;
-}
+	}
 
 .time{
 	float:right;
 	display:inline-block;
-	padding:25px 100px 25px 0;
+	padding:25px 10px 25px 0;
 
 }
 
@@ -51,7 +48,13 @@ ul li{
 	list-style:none;
 	float:left;
 	padding:10px 0px;
+	display:inline-flex;
 }
+
+/*
+.title-in{
+	padding:0px;
+}*/
 
 /*input, textarea{
 	font: 1em sans-serif;
@@ -64,6 +67,7 @@ ul li{
 textarea{
 	vertical-align: top;
 	height: 4em;
+	width:240px;
 }
 
 .contents-table{
@@ -136,36 +140,79 @@ textarea{
 /*	display:block; */
 }
 .text_number,text_name,text_content{
-	float:left;
-	vertical-align:middle;
 }
 
+.title_register{
+	display:block;
+}
 
 .text_date{
-	border-bottom:4px solid #3366CC;
 }
 
-.res_date{
-	border-bottom:1px solid #3366CC;
+/*----threadなしの設定-------------*/
+.heads{
+	display:inline-block;
 }
 
-.thread{
-	text-align:right;
+.text_content{
+	border-top:1px solid #3366CC;
+}
+
+
+.text_number{
+	display:inline-block;
+}
+
+.text_name{
+	display:inline-block;
+}
+
+.text_date{
+	float:right;
+}
+/*--------返信コメントの設定--------------------*/
+.threads{
+	display:flex;
+}
+
+.thread_text{
 	display:block;
-/*	padding-right:40%;
-	float:right; */
+	text-indent:7em;
 }
+
+.res_number{
+	display:inline-block;
+}
+
+.res_name{
+	display:inline-block;
+}
+.res_date{
+	float:right;
+}
+
+.res_content{
+	border-top:1px solid #3366CC;
+}
+
+/*----------------------------------------------*/
 
 .room-comment{
 	float:left;
 }
 /* formタグ内の調整 */
 .res{
+	display:block;
 	float:left;
+	width:60px;
 }
 
 .text{
 
+}
+
+.name{
+	width:240px;
 }
 .list_title{
 /*	text-align:center; */
