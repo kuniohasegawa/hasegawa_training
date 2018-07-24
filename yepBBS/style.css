@@ -1,5 +1,5 @@
 .display-width{
-	width:750px;
+	width:950px;
 }
 
 body{
@@ -23,13 +23,10 @@ h1{
 .time{
 	float:right;
 	display:inline-block;
-	padding:25px 10px 25px 0;
+	padding:25px 150px 25px 0;
 
 }
 
-.main-contents{
-	text-align:center;
-}
 
 /* formエリアのデザイン  */
 form{
@@ -46,9 +43,6 @@ label{
 
 ul li{
 	list-style:none;
-	float:left;
-	padding:10px 0px;
-	display:inline-flex;
 }
 
 /*
@@ -118,7 +112,7 @@ textarea{
 }
 
 .regi{
-	padding-right:280px;
+	padding-right:400px;
 }
 
 
@@ -146,13 +140,25 @@ textarea{
 	display:block;
 }
 
+
+
 .text_date{
 }
 
 /*----threadなしの設定-------------*/
-.heads{
-	display:inline-block;
+.style_heads{
+	clear:both;
+	display:block;
+
 }
+
+.style_threads{
+	clear:both;
+}
+
+/*.heads{
+	display:inline-block;
+}*/
 
 .text_content{
 	border-top:1px solid #3366CC;
@@ -172,12 +178,13 @@ textarea{
 }
 /*--------返信コメントの設定--------------------*/
 .threads{
-	display:flex;
+/*	display:; */
 }
 
 .thread_text{
 	display:block;
-	text-indent:7em;
+/*	text-indent:7em; */
+	padding-left:7em;
 }
 
 .res_number{
@@ -208,14 +215,13 @@ textarea{
 }
 
 .text{
+	float:left;
 
 }
 
 .name{
 	width:240px;
-}
-.list_title{
-/*	text-align:center; */
+	float:left;
 }
 /*---------------------------------*/
 
