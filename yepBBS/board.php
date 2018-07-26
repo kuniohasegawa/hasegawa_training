@@ -8,7 +8,7 @@ if (!empty($_POST)) {
 		$result=preg_match("/^[0-9]+$/",$_POST['res']);
 	}
 	if ((!empty($_POST['res'])) && ($result == 0)) {
-		$error['thread_number'] = 'error1';
+		$error['thread_number'] = 'Error:Harf_Width_DigitError';
 	}
 	if ((isset($_POST['text'])) && ($_POST['text']=='')) {
 		$error['text'] = 'blank';
@@ -33,7 +33,6 @@ $_POST['res'] = intval($_POST['res']);
 	}
 
 
-//threadnumber照合用のバリデーション
 $check = $db->prepare('select * from comments where number = ? and room_id = ? ');
 $check->execute(array(
 	$_POST['res'],
@@ -41,18 +40,16 @@ $check->execute(array(
 ));
 $check_thread_number = $check->fetch();
 
-//返信の番号がtextの値よりも小さいか
 $text = $db->prepare('select count(text) as count from comments where room_id = ?');
 $text->execute(array(
 	$room_id));
 $total_text = $text->fetch();
 
-//返信先の値がnumberよりも大きくなってしまった場合にerror2を
+
 if ($total_text['count'] < $_POST['res']) {
-	$error['res'] = 'error2';
+	$error['res'] = 'Error:ResNumber';
 }
 
-//  thread_numberあり、なしでinsertをわける
 if ($total_text['count'] <= 100) {
 	if (empty($error)) {
 		if (empty($_POST['res']) && ($total_text['count'] > $_POST['res'])) {
@@ -73,10 +70,10 @@ if ($total_text['count'] <= 100) {
 					$_POST['user_name']
 							));
 		 } else {
-	  $error['res'] = 'error2';
+	  $error['res'] = 'Error:ResNumericError';
 		 }}
 } else {
-		$error['max'] = 'error3';
+		$error['max'] = 'Error:MaxOverCommentError';
 }
 
 $relation = $db->prepare('SELECT * FROM comments WHERE room_id=? and thread_number IS NULL ORDER BY created ASC');
@@ -88,13 +85,6 @@ $stanby->execute(array(
 	$room_id,
 	));
    $threads = $stanby->fetchAll();
-
-
-//関数
-function h($value){
-	echo htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-}
-date_default_timezone_set('Asia/Tokyo');
 ?>
 
 <!DOCTYPE html>
@@ -114,7 +104,6 @@ date_default_timezone_set('Asia/Tokyo');
 		<?php echo date("h/i"); ?>
 
 	</div>
-<!-- メインコンテンツ	-->
 <div class="main">
 	<div class="text">
 		<?php foreach($nullthreads as $nullthread):?>
@@ -143,7 +132,6 @@ date_default_timezone_set('Asia/Tokyo');
 			</div>
 		<?php endforeach ;?>
 </div>
-<!--フォーム入力-->
 	<div class="footer">
 		<form method="post" action="" >
 			<ul>
@@ -151,13 +139,13 @@ date_default_timezone_set('Asia/Tokyo');
 				<li>
 					<label class="list_title">返信<input class="res" type="text" name="res"></label><br>
 					<div class="error_msg">
-						<?php if(isset($error['thread_number']) && $error['thread_number'] == 'error1'):?>
+						<?php if(isset($error['thread_number']) && $error['thread_number'] == 'Error:Harf_Width_DigitError'):?>
 							<?php echo '半角以外の数字が入力されています' ;?>
-						<?php elseif(isset($error['res']) && $error['res'] == 'error1'): ?>
+						<?php elseif(isset($error['res']) && $error['res'] == 'Error:Harf_Width_DigitError'): ?>
 							<?php echo '数値を入力してください'.'<br>';?>
-						<?php elseif($error['res'] == 'error2'): ?>
+						<?php elseif($error['res'] == 'Error:ResNumericError'): ?>
 							<?php echo '返信先が間違っています'; ?>
-						<?php elseif(isset($error['max']) && $error['max'] == 'error3'):?>
+						<?php elseif(isset($error['max']) && $error['max'] == 'Error:MaxOverCommentError'):?>
 							<?php  echo 'コメントが100件になりました。新しいRoomを作成してください'; ?><br>
 						<?php endif; ?>
 					</div>

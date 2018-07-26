@@ -1,6 +1,6 @@
 <?php
 require_once('dbconnect.php');
-
+require_once('structured.php');
 if (!empty($_POST)) {
 	if (isset($_POST['title']) && ($_POST['title'] == '')){
 		$error['title'] = 'blank';
@@ -18,21 +18,20 @@ if (isset($_POST) && (empty($error))) {
 	));
 }}
 
-$bord_p = $db->query('SELECT rooms.*, comments.modified AS comments_modified  FROM rooms JOIN comments ORDER BY modified DESC');
-$boards = $bord_p->fetchAll();
-//var_dump(max($boards['comments_modified']));
+$board_p = $db->prepare('SELECT r.*, c.modified AS comments_modified  FROM rooms r LEFT INNER JOIN comments c ON r.id = c.room_id ORDER BY r.modified DESC');
+$board_p->execute();
+$boards = $board_p->fetchAll();
+var_dump(max($boards['comments_modified']));
+var_dump($boards['id']);
+echo '<pre>';
+var_dump($boards);
+echo '</pre>';
 
 //$modified = $db->prepare('SELECT max(modified) AS modified FROM comments WHERE room_id = ?');
 //	$modified->execute(array(
 //			$boards['id']
 //		));
 //$last_comment_modified = $modified->fetchAll();
-function h($value) {
-	echo htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-}
-
-//ローカルタイムの設定
-date_default_timezone_set('Asia/Tokyo');
 ?>
 
 <!DOCTYPE html>
@@ -65,13 +64,15 @@ resizeTo(850,550);
 				<th>最終更新日</th>
 				</div>
 			</tr>
-		<?php foreach($boards as $board) : ?>
-			<tr>
-			<td class="detail"><a href="board.php?id = <?php echo $board['id']?>;"><?php h($board['title']); ?></a></td>
-				<td class="detail"><?php h($board['user_name']); ?></td>
-				<td class="detail"><?php h($board['comments_modified']); ?></td>
-			</tr>
-		<?php endforeach ; ?>
+		<?php if (isset($board)) : ?>
+			<?php foreach($boards as $board) : ?>
+				<tr>
+				<td class="detail"><a href="board.php?id = <?php echo $board['id'] ;?>;"><?php h($board['title']); ?></a></td>
+					<td class="detail"><?php h($board['user_name']); ?></td>
+					<td class="detail"><?php h(max($board['comments_modified'])); ?></td>
+				</tr>
+			<?php endforeach ; ?>
+		<?php endif; ?>
 	</table>
 	</div>
 
