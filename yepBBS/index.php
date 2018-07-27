@@ -17,21 +17,13 @@ if (isset($_POST) && (empty($error))) {
 		$_POST['user_name']
 	));
 }}
-
-$board_p = $db->prepare('SELECT r.*, c.modified AS comments_modified  FROM rooms r LEFT INNER JOIN comments c ON r.id = c.room_id ORDER BY r.modified DESC');
+//-----------------------------------------------------------
+$board_p = $db->prepare('
+	select * 
+	from rooms,(select max(modified) as comments_modified, room_id from comments group by room_id) c 
+	where rooms.id = c.room_id ');
 $board_p->execute();
 $boards = $board_p->fetchAll();
-var_dump(max($boards['comments_modified']));
-var_dump($boards['id']);
-echo '<pre>';
-var_dump($boards);
-echo '</pre>';
-
-//$modified = $db->prepare('SELECT max(modified) AS modified FROM comments WHERE room_id = ?');
-//	$modified->execute(array(
-//			$boards['id']
-//		));
-//$last_comment_modified = $modified->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -64,15 +56,18 @@ resizeTo(850,550);
 				<th>最終更新日</th>
 				</div>
 			</tr>
-		<?php if (isset($board)) : ?>
-			<?php foreach($boards as $board) : ?>
+			<?php if (isset($boards)) : ?>
+				<?php foreach($boards as $board) : ?>
 				<tr>
-				<td class="detail"><a href="board.php?id = <?php echo $board['id'] ;?>;"><?php h($board['title']); ?></a></td>
+<pre>
+<?php h(var_dump($board)); ?>
+</pre>
+					<td class="detail"><a href="board.php?id=<?php h($board['id']);?>"><?php h($board['title']); ?></a></td>
 					<td class="detail"><?php h($board['user_name']); ?></td>
-					<td class="detail"><?php h(max($board['comments_modified'])); ?></td>
+					<td class="detail"><?php h(date('Y/m/d/h/i',strtotime($board['comments_modified']))); ?></td>
 				</tr>
-			<?php endforeach ; ?>
-		<?php endif; ?>
+				<?php endforeach ; ?>
+			<?php endif; ?>
 	</table>
 	</div>
 
