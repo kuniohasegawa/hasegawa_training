@@ -1,6 +1,8 @@
 <?php
 require_once('dbconnect.php');
 require_once('structured.php');
+const Index_Error = 1;
+
 if (!empty($_POST)) {
 	if ((isset($_POST['title'])) && ($_POST['title'] == '')){
 		$error['title'] = 'blank';
@@ -17,7 +19,7 @@ if (!empty($_POST)) {
 		$_POST['user_name']
 	));
 	} else {
-		echo h('登録エラー：登録できませんでした。ルーム名、名前の登録');
+		$error['db'] = Index_Error;
 	}
 }
 $board_p = $db->prepare('
@@ -35,15 +37,6 @@ $rooms_contents = $aaa->fetchAll();
 $bbb = $db->prepare('select max(modified) as comments_modified, room_id from comments group by room_id');
 $bbb->execute();
 $comments_last_modified = $bbb->fetchAll();
-
-
-/*			<?php if (isset($boards)) : ?>
-				<?php foreach ($boards as $board) : ?>  
-	<!--	<td class="detail"><a href="board.php?id=<?php h($board['id']); ?>"><?php h($board['title']); ?></a></td>
-					<td class="detail"><?php h($board['user_name']); ?></td>
-					<td class="detail"><?php h(date('Y/m/d/h/i', strtotime($board['comments_modified']))); ?></td>  -->
-
-*/
 ?>
 
 <!DOCTYPE html>
@@ -73,44 +66,56 @@ $comments_last_modified = $bbb->fetchAll();
 					<th>最終更新日</th>
 				</div>
 			</tr>
-
-		<!-- 代替案ver -->
+		<div class = 'error_omission'>
+			<?php if ((isset($error['db'])) && ($error['db'] == Index_Error)) : ?>
+				<?php h('登録できませんでした。タイトル、名前の記入漏れがないか確認してください。') ?>
+			<?php endif; ?>
+		</div>
 			<?php if (isset($rooms_contents)) : ?>
-				<?php foreach ($rooms_contents as $rooms_content) : ?> 
+				<?php foreach ($rooms_contents as $rooms_content) : ?>
 				<tr>
-							<!-- 代替案ver -->
-					<td class="detail"><a href="board.php?id=<?php h($rooms_content['id']); ?>"><?php h($rooms_content['title']); ?></a></td>
-					<td class="detail"><?php h($rooms_content['user_name']); ?></td>
+					<td class="link_detail"><a href="board.php?id=<?php h($rooms_content['id']); ?>"><?php h($rooms_content['title']); ?></a></td>
+					<td class="user_detail"><?php h($rooms_content['user_name']); ?></td>
 						<?php if ((isset($comments_last_modified)) && (!empty($comments_last_modified))) : ?>
 							<?php foreach ($comments_last_modified as $comments_last_mod) : ?>
 								<?php if($comments_last_mod['room_id'] == $rooms_content['id']) : ?>
-									<td class="detail"><?php h(date('Y/m/d',strtotime($comments_last_mod['comments_modified']))); ?></td>
+									<td class="date_detail"><?php h(date('Y/m/d',strtotime($comments_last_mod['comments_modified']))); ?></td>
 								<?php endif; ?>
 							<?php endforeach ;?>
 						<?php endif; ?>
 				</tr>
 				<?php endforeach ; ?>
-			<?php endif; ?>  
+			<?php endif; ?>
 	</table>
 	</div>
 
 
 	<div class="footer">
 		<form method="post" action="" >
-			<p class="regi">ルーム登録</p>
-			<span class="roomname">ルーム名</span><input class = "room" type = "text" name = "title"><br>
-			<span class="error_msg">
-				<?php if(isset($error['title']) == 'blank'): ?>
-					<?php echo '必ず入力してください'.'<br>';?>
-				<?php endif; ?>
-			</span>
-			<span class="list-name">名前</span><input class="name"type="text" name="user_name">
-			<input class="btn" type="submit" value="登録" ><br>
-			<span class="error_msg">
-				<?php if (isset($error['user_name']) == 'blank'): ?>
-					<?php echo '必ず入力してください'.'<br>'; ?>
-				<?php endif; ?>
-			</span>
+			 <ul>
+				<li>
+					ルーム登録
+				</li>
+				<li class="roomname">
+					<label for="title">ルーム名</label>
+					<input class = "room" type = "text" name = "title"><br>
+					<span class="error_msg">
+						<?php if(isset($error['title']) == 'blank'): ?>
+							<p><?php echo '必ず入力してください'.'<br>';?></p>
+						<?php endif; ?>
+					</span>
+				</li>
+				<li class="list-name">
+					<label for="user_name">名前</label>
+					<input class="rooms_name"type="text" name="user_name">
+					<input class="btn" type="submit" value="登録" ><br>
+					<span class="error_msg">
+						<?php if (isset($error['user_name']) == 'blank'): ?>
+							<?php echo '必ず入力してください'.'<br>'; ?>
+						<?php endif; ?>
+					</span>
+				</li>
+			</ul>
 		</form>
 	</div>
 </div>

@@ -5,6 +5,7 @@ require_once('structured.php');
 
 const Harf_Width_Error = 1;
 const Reverse_Path_Error = 2;
+const Insert_Error = 3;  
 const MaxOverCommentError = 4;
 const blank = 5;
 const max_comments = 100;
@@ -34,20 +35,17 @@ $num->execute(array($room_id));
 $numbers = $num->fetchAll();
 $numbers = count($numbers) + 1;
 $numbers = intval($numbers);
-if ($numbers == 0) {
-	$numbers = null;
-}
 
-if(isset($Res['res'])) {
-	$Res['res'] = intval($Res['res']);
-		if($Res['res'] == 0) {
-			$Res['res'] = null;
+if(isset($_POST['res'])) {
+	$_POST['res'] = intval($_POST['res']);
+		if($_POST['res'] == 0) {
+			$_POST['res'] = null;
 		}
 }
-if(isset($Res['res'])) {
+if(isset($_POST['res'])) {
 $check = $db->prepare('select * from comments where number = ? and room_id = ?');
 $check->execute(array(
-	$Res['res'],
+	$_POST['res'],
 	$room_id
 ));
 $check_thread_number = $check->fetch();
@@ -57,15 +55,15 @@ $text = $db->prepare('select count(text) as count from comments where room_id = 
 $text->execute(array($room_id));
 $total_text = $text->fetch();
 
-if (isset($Res['res'])) {
-	if ($total_text['count'] < $Res['res']) {
+if (isset($_POST['res'])) {
+	if ($total_text['count'] < $_POST['res']) {
 		$error['res'] = Reverse_Path_Error;
 	}
 }
 
 if ($total_text['count'] <= max_comments) {
-	if ((empty($error)) && (isset($Res))) {
-		if ((empty($Res['res'])) && (isset($_POST['text'],$_POST['user_name']))) {
+	if ((empty($error)) && (isset($_POST))) {
+		if ((empty($_POST['res'])) && (isset($_POST['text'],$_POST['user_name']))) {
 			$bbs = $db->prepare('INSERT INTO comments SET room_id = ?, thread_number = ?, number = ?, text = ?, user_name = ?, modified = NOW(), created = NOW()');
 				$test = $bbs->execute(array(
 					$room_id,
@@ -74,15 +72,19 @@ if ($total_text['count'] <= max_comments) {
 					$_POST['text'],
 					$_POST['user_name']
 				));
-		 } elseif ((isset($Res['res'])) && (!is_null($Res['res'])) && (is_null($check_thread_number['thread_number'])) && ($total_text['count'] > $Res['res'])) {
+		 } elseif ((isset($_POST['res'])) && (!is_null($_POST['res'])) && (is_null($check_thread_number['thread_number'])) && ($total_text['count'] >= $_POST['res'])) {
 			$bbs = $db->prepare('INSERT INTO comments SET room_id = ?, thread_number = ?, number = ?, text = ?, user_name = ?, modified = NOW(), created = NOW()');
 				$test = $bbs->execute(array(
 					$room_id,
-					$Res['res'],
+					$_POST['res'],
 					$numbers,
 					$_POST['text'],
 					$_POST['user_name']
 				));
+		} elseif ((isset($_POST['res'])) && (isset($check_thread_number['thread_number']))) {
+			$error['is'] = Insert_Error;
+		} elseif ((isset($_POST['res'])) && ($total_text['count'] <= $_POST['res'])) {
+			$error['res'] = Reverse_Path_Error;
 		}
 	}
 } else {
@@ -110,10 +112,10 @@ $threads = $stanby->fetchAll();
 </head>
 
 <body>
-	<div class="header">
+	<div class="comments_header">
 		<h1><span>yep</span>BBS</h1>
 	</div>
-	<div class="time">
+	<div class="comments_time">
 		<?php echo date("y/m/d"); ?><br>
 		<?php echo date("h/i"); ?>
 
@@ -125,7 +127,7 @@ $threads = $stanby->fetchAll();
 				<div class="heads">
 					<div class="text_number"><?php h($nullthread['number']); ?></div>
 					<div class="text_name"><?php h($nullthread['user_name']); ?></div>
-					<div class="text_date"><?php h(date('Y/m/d/h/i',strtotime($nullthread['created']))); ?></div>
+					<div class="text_date"><?php h(date('Y/m/d H:i',strtotime($nullthread['created']))); ?></div>
 					<div class="text_content"><?php h($nullthread['text']); ?><br><br></div>
 				</div>
 			<div>
@@ -136,7 +138,7 @@ $threads = $stanby->fetchAll();
 							<div class="threads">
 								<div class="res_number"><?php h($thread['number']); ?></div>
 								<div class="res_name"><?php h($thread['user_name']); ?></div>
-								<div class="res_date"><?php h(date('Y/m/d',strtotime($thread['created']))); ?></div>
+								<div class="res_date"><?php h(date('Y/m/d H:i',strtotime($thread['created']))); ?></div>
 							</div>
 								<div class="res_content"><?php h($thread['text']); ?><br><br></div>
 						</div>
@@ -146,20 +148,22 @@ $threads = $stanby->fetchAll();
 		<?php endforeach; ?>
 	</div>
 </div>
-	<div class="footer">
+	<div class="comments_footer">
 		<form method="post" action="" >
 			<ul>
 				<li class="title_register"><p class="regi">コメント登録</p></li>
 				<li>
 					<label class="list_title">返信<input class="res" type="text" name="res"></label><br>
 					<div class="error_msg">
-						<?php if((isset($error['thread_number'])) && ($error['thread_number'] == Harf_Width_Error)): ?>
+						<?php if((isset($error['thread_number'])) && ($error['thread_number'] == Harf_Width_Error)) : ?>
 							<?php echo '半角以外の数字が入力されています'; ?>
-						<?php elseif((isset($error['thread_number'])) && ($error['thread_number'] == Harf_Width_Error)): ?>
+						<?php elseif((isset($error['thread_number'])) && ($error['thread_number'] == Harf_Width_Error)) : ?>
 							<?php echo '数値を入力してください'.'<br>'; ?>
-						<?php elseif(isset($error['res']) && ($error['res'] == Reverse_Path_Error)): ?>
+						<?php elseif((isset($error['is'])) && ($error['is'] == Insert_Error)) : ?>
+							<?php echo 'コメントに失敗しました'; ?>
+						<?php elseif(isset($error['res']) && ($error['res'] == Reverse_Path_Error)) : ?>
 							<?php echo '返信先が間違っています'; ?>
-						<?php elseif((isset($error['max'])) && ($error['max'] == MaxOverCommentError)): ?>
+						<?php elseif((isset($error['max'])) && ($error['max'] == MaxOverCommentError)) :  ?>
 							<?php  echo 'コメントが100件になりました。新しいRoomを作成してください'; ?><br>
 						<?php endif; ?>
 					</div>
@@ -180,7 +184,7 @@ $threads = $stanby->fetchAll();
 				</li>
 				<li>
 					<div class="error_msg">
-						<?php if(isset($error['user_name']) == blank): ?>
+						<?php if(isset($error['user_name']) == blank) : ?>
 							<p><?php echo '必ず入力してください'; ?></p>
 						<?php endif; ?>
 					</div>

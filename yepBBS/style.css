@@ -1,15 +1,13 @@
-.display-width{
-	width:950px;
-}
-
 body{
 	margin-right: auto;
 	margin-left: auto;
-	width:650px;
+	width:60%;
+	height: auto;
 }
 
 h1{
 	text-align:left;
+	padding-left: 130px;
 }
 
 .header{
@@ -20,42 +18,33 @@ h1{
 	color:red;
 	}
 
+.comments_header span{
+	color:red;
+}
+
 .time{
 	float:right;
 	display:inline-block;
 	padding:25px 150px 25px 0;
-
 }
-
+.comments_time{
+	float:right;
+	display:inline-block;
+	margin-top:30px;
+	margin-right:30px;
+	margin-bottom:90px;
+}
 
 /* formエリアのデザイン  */
 form{
-	margin : 0 auto;
-	width : 600;
 }
 
 label{
-	display: inline-block;
-	width: 150px;
-	text-align: left;
-	float:left;
 }
 
 ul li{
 	list-style:none;
 }
-
-/*
-.title-in{
-	padding:0px;
-}*/
-
-/*input, textarea{
-	font: 1em sans-serif;
-	width: 300px;
-	box-sizing: border-box;
-
-}*/
 
 
 textarea{
@@ -79,14 +68,12 @@ textarea{
 }
 
 .footer{
-	text-align:center;
+	margin-left:90px;
+	margin-top: 100px;
 }
 
 
 .roomname{
-	margin-right:30px;
-	margin-left:50px;
-	float:right;
 }
 
 
@@ -94,8 +81,12 @@ textarea{
 	margin-right:60px;
 }
 
+.user_name{
+	float : left;
+}
 .room{
-	margin-right:80px;
+	margin-left:100px;
+	width:200px;
 }
 
 .room_p{
@@ -120,21 +111,35 @@ textarea{
 	background-color:#87cefa;
 	display:inline-block;
 	margin-left:30px;
-	float:left;
+	width:70px;
+}
+
+.error_omission{
+	color:red;
+	margin-left: 110px;
+}
+
+.link_detail{
+	
+}
+.rooms_name{
+	margin-left: 132px;
+	width:200px;
+}
+.user_detail{
+	width:150px;
+}
+
+.date_detail{
+	width:100px;
 }
 
 .error_msg{
 	color:red;
 }
 
-/*board.php の css----------------*/
-.main{
-/*	display:inline-block; */
-/*	text-align:left; */
-/*	display:block; */
-}
-.text_number,text_name,text_content{
-}
+
+
 
 .title_register{
 	display:block;
@@ -159,7 +164,9 @@ textarea{
 /*.heads{
 	display:inline-block;
 }*/
-
+.comments_header{
+	display:inline-block;
+}
 .text_content{
 	border-top:1px solid #3366CC;
 }
@@ -209,19 +216,21 @@ textarea{
 }
 /* formタグ内の調整 */
 .res{
-	display:block;
-	float:left;
-	width:60px;
+	margin-left:150px;
+	width: 70px;
 }
 
 .text{
-	float:left;
-
+	margin-left:120px;
 }
 
 .name{
-	width:240px;
-	float:left;
+	margin-left: 152px;
+	width:244px;
+}
+
+.comments_footer{
+	margin-top: 100px;
 }
 /*---------------------------------*/
 
