@@ -81,10 +81,10 @@ $comments_last_modified = $bbb->fetchAll();
 								<?php if($comments_last_mod['room_id'] == $rooms_content['id']) : ?>
 									<td class="date_detail"><?php h(date('Y/m/d',strtotime($comments_last_mod['comments_modified']))); ?></td>
 								<?php endif; ?>
-							<?php endforeach ;?>
+							<?php endforeach;?>
 						<?php endif; ?>
 				</tr>
-				<?php endforeach ; ?>
+				<?php endforeach; ?>
 			<?php endif; ?>
 	</table>
 	</div>
@@ -100,7 +100,7 @@ $comments_last_modified = $bbb->fetchAll();
 					<label for="title">ルーム名</label>
 					<input class = "room" type = "text" name = "title"><br>
 					<span class="error_msg">
-						<?php if(isset($error['title']) == 'blank'): ?>
+						<?php if (isset($error['title']) == 'blank') : ?>
 							<p><?php echo '必ず入力してください'.'<br>';?></p>
 						<?php endif; ?>
 					</span>
@@ -110,7 +110,7 @@ $comments_last_modified = $bbb->fetchAll();
 					<input class="rooms_name"type="text" name="user_name">
 					<input class="btn" type="submit" value="登録" ><br>
 					<span class="error_msg">
-						<?php if (isset($error['user_name']) == 'blank'): ?>
+						<?php if (isset($error['user_name']) == 'blank') : ?>
 							<?php echo '必ず入力してください'.'<br>'; ?>
 						<?php endif; ?>
 					</span>

@@ -133,7 +133,7 @@ $threads = $stanby->fetchAll();
 			<div>
 			<div class="thread_text">
 				<?php foreach($threads as $thread): ?>
-					<?php if($thread['thread_number'] == $nullthread['number']): ?>
+					<?php if($thread['thread_number'] == $nullthread['number']) : ?>
 						<div class = "style_threads">
 							<div class="threads">
 								<div class="res_number"><?php h($thread['number']); ?></div>
@@ -155,30 +155,32 @@ $threads = $stanby->fetchAll();
 				<li>
 					<label class="list_title">返信<input class="res" type="text" name="res"></label><br>
 					<div class="error_msg">
-						<?php if((isset($error['thread_number'])) && ($error['thread_number'] == Harf_Width_Error)) : ?>
+						<?php if ((isset($error['thread_number'])) && ($error['thread_number'] == Harf_Width_Error)) : ?>
 							<?php echo '半角以外の数字が入力されています'; ?>
-						<?php elseif((isset($error['thread_number'])) && ($error['thread_number'] == Harf_Width_Error)) : ?>
+						<?php elseif ((isset($error['thread_number'])) && ($error['thread_number'] == Harf_Width_Error)) : ?>
 							<?php echo '数値を入力してください'.'<br>'; ?>
-						<?php elseif((isset($error['is'])) && ($error['is'] == Insert_Error)) : ?>
+						<?php elseif ((isset($error['is'])) && ($error['is'] == Insert_Error)) : ?>
 							<?php echo 'コメントに失敗しました'; ?>
-						<?php elseif(isset($error['res']) && ($error['res'] == Reverse_Path_Error)) : ?>
+						<?php elseif (isset($error['res']) && ($error['res'] == Reverse_Path_Error)) : ?>
 							<?php echo '返信先が間違っています'; ?>
-						<?php elseif((isset($error['max'])) && ($error['max'] == MaxOverCommentError)) :  ?>
+						<?php elseif ((isset($error['max'])) && ($error['max'] == MaxOverCommentError)) :  ?>
 							<?php  echo 'コメントが100件になりました。新しいRoomを作成してください'; ?><br>
 						<?php endif; ?>
 					</div>
 				</li>
 				<li>
-					<label class="list_title">コメント</label><textarea class="text" name="text" raws="30" cols="35" ></textarea><br>
+					<label class="list_title">コメント</label>
+					<textarea class="text" name="text" raws="30" cols="35" ></textarea><br>
 						<div class="error_msg">
-							<?php if(isset($error['text']) == blank): ?>
+							<?php if(isset($error['text']) == blank) : ?>
 								<p><?php echo '必ず入力してください'; ?></p><br>
 							<?php endif; ?>
 						</div>
 				</li>
 				<li>
 					<div class="name_list">
-						<label class="list_title">名前</label><input class="name" type="text" name="user_name">
+						<label class="list_title">名前</label>
+						<input class="name" type="text" name="user_name">
 						<input class="btn" type="submit" value="登録" >
 					</div>
 				</li>
