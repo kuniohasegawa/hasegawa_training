@@ -38,16 +38,16 @@ if ($numbers == 0) {
 	$numbers = null;
 }
 
-if(isset($_POST['res'])) {
-	$_POST['res'] = intval($_POST['res']);
-		if($_POST['res'] == 0) {
-			$_POST['res'] = null;
+if(isset($Res['res'])) {
+	$Res['res'] = intval($Res['res']);
+		if($Res['res'] == 0) {
+			$Res['res'] = null;
 		}
 }
-if(isset($_POST['res'])) {
+if(isset($Res['res'])) {
 $check = $db->prepare('select * from comments where number = ? and room_id = ?');
 $check->execute(array(
-	$_POST['res'],
+	$Res['res'],
 	$room_id
 ));
 $check_thread_number = $check->fetch();
@@ -57,15 +57,15 @@ $text = $db->prepare('select count(text) as count from comments where room_id = 
 $text->execute(array($room_id));
 $total_text = $text->fetch();
 
-if (isset($_POST['res'])) {
-	if ($total_text['count'] < $_POST['res']) {
+if (isset($Res['res'])) {
+	if ($total_text['count'] < $Res['res']) {
 		$error['res'] = Reverse_Path_Error;
 	}
 }
 
 if ($total_text['count'] <= max_comments) {
-	if ((empty($error)) && (isset($_POST))) {
-		if ((empty($_POST['res'])) && (isset($_POST['text'],$_POST['user_name']))) {
+	if ((empty($error)) && (isset($Res))) {
+		if ((empty($Res['res'])) && (isset($_POST['text'],$_POST['user_name']))) {
 			$bbs = $db->prepare('INSERT INTO comments SET room_id = ?, thread_number = ?, number = ?, text = ?, user_name = ?, modified = NOW(), created = NOW()');
 				$test = $bbs->execute(array(
 					$room_id,
@@ -74,11 +74,11 @@ if ($total_text['count'] <= max_comments) {
 					$_POST['text'],
 					$_POST['user_name']
 				));
-		 } elseif ((isset($_POST['res'])) && (!is_null($_POST['res'])) && (is_null($check_thread_number['thread_number'])) && ($total_text['count'] > $_POST['res'])) {
+		 } elseif ((isset($Res['res'])) && (!is_null($Res['res'])) && (is_null($check_thread_number['thread_number'])) && ($total_text['count'] > $Res['res'])) {
 			$bbs = $db->prepare('INSERT INTO comments SET room_id = ?, thread_number = ?, number = ?, text = ?, user_name = ?, modified = NOW(), created = NOW()');
 				$test = $bbs->execute(array(
 					$room_id,
-					$_POST['res'],
+					$Res['res'],
 					$numbers,
 					$_POST['text'],
 					$_POST['user_name']
