@@ -10,6 +10,10 @@ h1{
 	padding-left: 130px;
 }
 
+th{
+	background-color:#333399;
+	color:white;
+}
 
 .max_comments{
 	color:red;
@@ -67,6 +71,10 @@ textarea{
 	border:1px;
 	border-style:solid;
 	width:80%;
+}
+
+.title-detail{
+	text-align:left;
 }
 
 .contents-table tr:nth-child(odd) td{
