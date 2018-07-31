@@ -9,6 +9,7 @@ const Insert_Error = 3;
 const MaxOverCommentError = 4;
 const blank = 5;
 const max_comments = 100;
+const Over_User_Name_Varchar = 20;
 
 $room_id = intval($_GET['id']);
 
@@ -24,6 +25,9 @@ if (!empty($_POST)) {
 	}
 	if ((isset($_POST['user_name'])) && ($_POST['user_name'] == '')) {
 		$error['user_name'] = blank;
+	}
+	if ((isset($_POST['user_name'])) && (strlen($_POST['user_name']) > 20)) {
+		$error['over_user_name'] = Over_User_Name_Varchar;
 	}
 	if (isset($_POST['res'])){
 		$Res['res'] = $_POST['res'];
@@ -61,7 +65,7 @@ if (isset($_POST['res'])) {
 	}
 }
 
-if ($total_text['count'] <= max_comments) {
+if ($total_text['count'] < max_comments) {
 	if ((empty($error)) && (isset($_POST))) {
 		if ((empty($_POST['res'])) && (isset($_POST['text'],$_POST['user_name']))) {
 			$bbs = $db->prepare('INSERT INTO comments SET room_id = ?, thread_number = ?, number = ?, text = ?, user_name = ?, modified = NOW(), created = NOW()');
@@ -89,8 +93,7 @@ if ($total_text['count'] <= max_comments) {
 	}
 } else {
 	$error['max'] = 'MaxOverCommentError';
-	echo '100件をこえました。';
-}
+	}
 
 $relation = $db->prepare('SELECT * FROM comments WHERE room_id = ? and thread_number IS NULL ORDER BY created ASC');
 $relation->execute(array($room_id));
@@ -112,11 +115,14 @@ $threads = $stanby->fetchAll();
 </head>
 
 <body>
+	<?php if ($numbers >100) : ?>
+		 <h4 class="max_comments"><?php h('コメントが100件になりました。ここにはコメントできません。') ?></h4>
+	<?php endif; ?>
 	<div class="comments_header">
 		<h1><span>yep</span>BBS</h1>
 	</div>
 	<div class="comments_time">
-		<?php echo date("y/m/d"); ?><br>
+		<?php echo date("Y/m/d"); ?><br>
 		<?php echo date("h/i"); ?>
 
 	</div>
@@ -171,9 +177,9 @@ $threads = $stanby->fetchAll();
 				<li>
 					<label class="list_title">コメント</label>
 					<textarea class="text" name="text" raws="30" cols="35" ></textarea><br>
-						<div class="error_msg">
+						<div class="comments_error_msg">
 							<?php if(isset($error['text']) == blank) : ?>
-								<p><?php echo '必ず入力してください'; ?></p><br>
+								<h4 class="comments_error"><?php echo '必ず入力してください'; ?></h4><br>
 							<?php endif; ?>
 						</div>
 				</li>
@@ -185,9 +191,12 @@ $threads = $stanby->fetchAll();
 					</div>
 				</li>
 				<li>
-					<div class="error_msg">
+					<div class="comments_error_msg">
 						<?php if(isset($error['user_name']) == blank) : ?>
-							<p><?php echo '必ず入力してください'; ?></p>
+							<h4 class="comments_error"><?php echo '必ず入力してください'; ?></h4>
+						<?php endif; ?>
+						<?php if((isset($error['over_user_name'])) && ($error['over_user_name'] == Over_User_Name_Varchar)) : ?>
+							<h4 class="comments_error"><?php echo '名前の文字数が20文字を超えています。'; ?></h4>
 						<?php endif; ?>
 					</div>
 				</li>

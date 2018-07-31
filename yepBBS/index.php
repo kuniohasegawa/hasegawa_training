@@ -2,16 +2,22 @@
 require_once('dbconnect.php');
 require_once('structured.php');
 const Index_Error = 1;
+const Over_Title_Varchar = 50;
+const Over_User_Name_Varchar = 20;
 
 if (!empty($_POST)) {
-	if ((isset($_POST['title'])) && ($_POST['title'] == '')){
+	if ((isset($_POST['title'])) && ($_POST['title'] == '')) {
 		$error['title'] = 'blank';
 	}
-	if ((isset($_POST['user_name'])) && ($_POST['user_name'] == '')){
+	if ((isset($_POST['title'])) && (strlen($_POST['title']) > 50)) {
+		$error['over_title'] = Over_Title_Varchar;
+	}
+	if ((isset($_POST['user_name'])) && ($_POST['user_name'] == '')) {
 		$error['user_name'] = 'blank';
 	}
-
-
+	if ((isset($_POST['user_name'])) && (strlen($_POST['user_name']) > 20)) {
+		$error['over_user_name'] = Over_User_Name_Varchar;
+	}
 	if ((isset($_POST)) && (empty($error))) {
 	$member = $db->prepare('INSERT INTO rooms SET title = ?, user_name = ?, modified = NOW(), created = NOW()');
 	$member->execute(array(
@@ -53,7 +59,7 @@ $comments_last_modified = $bbb->fetchAll();
 		<h1><span>yep</span>BBS</h1>
 	</div>
 	<div class="time">
-		<?php echo date("y/m/d"); ?><br>
+		<?php echo date("Y/m/d"); ?><br>
 		<?php echo date("h/i"); ?>
 
 	</div>
@@ -101,8 +107,11 @@ $comments_last_modified = $bbb->fetchAll();
 					<input class = "room" type = "text" name = "title"><br>
 					<span class="error_msg">
 						<?php if (isset($error['title']) == 'blank') : ?>
-							<p><?php echo '必ず入力してください'.'<br>';?></p>
-						<?php endif; ?>
+							<h4><?php echo '必ず入力してください'.'<br>';?></h4>
+						<?php endif ; ?>
+						<?php if ((isset($error['over_title'])) && ($error['over_title'] == Over_Title_Varchar)) : ?>
+							<h4><?php echo 'タイトルの文字数が50文字を超えています。'; ?></h4>
+						<?php endif ; ?>
 					</span>
 				</li>
 				<li class="list-name">
@@ -111,8 +120,11 @@ $comments_last_modified = $bbb->fetchAll();
 					<input class="btn" type="submit" value="登録" ><br>
 					<span class="error_msg">
 						<?php if (isset($error['user_name']) == 'blank') : ?>
-							<?php echo '必ず入力してください'.'<br>'; ?>
-						<?php endif; ?>
+							<h4><?php echo '必ず入力してください'.'<br>'; ?></h4>
+						<?php endif ; ?>
+						<?php if ((isset($error['over_user_name'])) && ($error['over_user_name'] == Over_User_Name_Varchar)) : ?>
+							<h4><?php echo '名前の文字数が20文字を超えています。' ; ?></h4>
+						<?php endif ; ?>
 					</span>
 				</li>
 			</ul>
