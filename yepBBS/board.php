@@ -5,7 +5,7 @@ require_once('structured.php');
 
 const Harf_Width_Error = 1;
 const Reverse_Path_Error = 2;
-const Insert_Error = 3;  
+const Insert_Error = 3;
 const MaxOverCommentError = 4;
 const blank = 5;
 const max_comments = 100;
@@ -123,7 +123,7 @@ $threads = $stanby->fetchAll();
 	</div>
 	<div class="comments_time">
 		<?php echo date("Y/m/d"); ?><br>
-		<?php echo date("h/i"); ?>
+		<?php echo date("H:i"); ?>
 
 	</div>
 <div class="main">
@@ -163,8 +163,6 @@ $threads = $stanby->fetchAll();
 					<div class="error_msg">
 						<?php if ((isset($error['thread_number'])) && ($error['thread_number'] == Harf_Width_Error)) : ?>
 							<?php echo '半角以外の数字が入力されています'; ?>
-						<?php elseif ((isset($error['thread_number'])) && ($error['thread_number'] == Harf_Width_Error)) : ?>
-							<?php echo '数値を入力してください'.'<br>'; ?>
 						<?php elseif ((isset($error['is'])) && ($error['is'] == Insert_Error)) : ?>
 							<?php echo 'コメントに失敗しました'; ?>
 						<?php elseif (isset($error['res']) && ($error['res'] == Reverse_Path_Error)) : ?>

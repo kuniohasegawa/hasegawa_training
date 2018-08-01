@@ -60,7 +60,7 @@ $comments_last_modified = $bbb->fetchAll();
 	</div>
 	<div class="time">
 		<?php echo date("Y/m/d"); ?><br>
-		<?php echo date("h/i"); ?>
+		<?php echo date("H:i"); ?>
 
 	</div>
 	<div class="main-contents">

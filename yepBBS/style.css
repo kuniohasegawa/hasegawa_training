@@ -15,6 +15,12 @@ th{
 	color:white;
 }
 
+a{
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
 .max_comments{
 	color:red;
 	margin-left:110px;
